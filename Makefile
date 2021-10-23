@@ -12,16 +12,16 @@ PROGRAM_NAME=Engine
 
 .PHONY: build release execute debug clean leak
 
-build:
+debug_build:
 	$(CC) $(DEBUG_FLAGS) $(INCLUDE) $(FILES) $(OTHER) $(LIBS) -o $(PROGRAM_NAME).elf
 
-release:
+release_build:
 	$(CC) $(RELEASE_FLAGS) $(INCLUDE) $(FILES) $(OTHER) $(LIBS) -o $(PROGRAM_NAME).elf
 
-execute:
+Release: release_build
 	./$(PROGRAM_NAME).elf
 
-debug:
+Debug: debug_build
 	gdb $(PROGRAM_NAME).elf
 
 leak: build
