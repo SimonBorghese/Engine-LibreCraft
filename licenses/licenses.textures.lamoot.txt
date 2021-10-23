@@ -1,0 +1,7 @@
+This application uses textures created by Lamoot (https://opengameart.org/users/lamoot)
+
+These texutres are licensed under CC-BY 3.0
+A copy of this license can be found here
+https://creativecommons.org/licenses/by/3.0/legalcode
+
+No changes were made to these textures

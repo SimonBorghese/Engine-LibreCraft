@@ -82,7 +82,7 @@ int main()
     mainShader = new shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 
     bottom = new Image("dirt.jpg", GL_TEXTURE0, GL_RGB,0);
-    top = new Image("grass.jpg", GL_TEXTURE1, GL_RGB,0);
+    top = new Image("sand.jpg", GL_TEXTURE1, GL_RGB,0);
     left_t = new Image("sidedirt.jpg", GL_TEXTURE2, GL_RGB, 1);
     right_t = new Image("sidedirt.jpg", GL_TEXTURE3, GL_RGB, 1);
     front = new Image("sidedirt.jpg", GL_TEXTURE4, GL_RGB, 0);
