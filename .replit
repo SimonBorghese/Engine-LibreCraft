@@ -1,2 +1,2 @@
 audio = true
-run = "make build execute"
+run = "make Debug"

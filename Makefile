@@ -22,7 +22,7 @@ Release: release_build
 	./$(PROGRAM_NAME).elf
 
 Debug: debug_build
-	gdb $(PROGRAM_NAME).elf
+	./$(PROGRAM_NAME).elf > output.txt
 
 leak: build
 	valgrind --leak-check=full --xml=yes --xml-file=valgrind.xml ./$(PROGRAM_NAME).elf
