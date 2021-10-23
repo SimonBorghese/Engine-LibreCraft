@@ -1,4 +1,5 @@
 *.elf
+Engine.elf
 *.o
 *.xml
 .replit
