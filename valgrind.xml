@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./Engine.elf</line>
+</preamble>
+
+<pid>295</pid>
+<ppid>175</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--leak-check=full</arg>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=valgrind.xml</arg>
+  </vargv>
+  <argv>
+    <exe>./Engine.elf</exe>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.047 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:08.431 </time>
+</status>
+
+<error>
+  <unique>0x2</unique>
+  <tid>1</tid>
+  <kind>Leak_DefinitelyLost</kind>
+  <xwhat>
+    <text>1 bytes in 1 blocks are definitely lost in loss record 1 of 1,760</text>
+    <leakedbytes>1</leakedbytes>
+    <leakedblocks>1</leakedblocks>
+  </xwhat>
+  <stack>
+    <frame>
+      <ip>0x4C31B0F</ip>
+      <obj>/usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so</obj>
+      <fn>malloc</fn>
+    </frame>
+    <frame>
+      <ip>0x6865A24</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XlcDefaultMapModifiers</fn>
+    </frame>
+    <frame>
+      <ip>0x6865E15</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>XSetLocaleModifiers</fn>
+    </frame>
+    <frame>
+      <ip>0x4F0496A</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+    <frame>
+      <ip>0x4F0B47B</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+    <frame>
+      <ip>0x4EDEE5E</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+    <frame>
+      <ip>0x4E5C3C6</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+    <frame>
+      <ip>0x109FF7</ip>
+      <obj>/home/runner/Simons-Engine/Engine.elf</obj>
+      <fn>Window::Window(char const*, unsigned int, unsigned int)</fn>
+      <dir>/home/runner/Simons-Engine</dir>
+      <file>graphics.cpp</file>
+      <line>4</line>
+    </frame>
+    <frame>
+      <ip>0x10A254</ip>
+      <obj>/home/runner/Simons-Engine/Engine.elf</obj>
+      <fn>main</fn>
+      <dir>/home/runner/Simons-Engine</dir>
+      <file>main.cpp</file>
+      <line>18</line>
+    </frame>
+  </stack>
+</error>
+
+<error>
+  <unique>0x6b3</unique>
+  <tid>1</tid>
+  <kind>Leak_DefinitelyLost</kind>
+  <xwhat>
+    <text>192 (16 direct, 176 indirect) bytes in 1 blocks are definitely lost in loss record 1,714 of 1,760</text>
+    <leakedbytes>192</leakedbytes>
+    <leakedblocks>1</leakedblocks>
+  </xwhat>
+  <stack>
+    <frame>
+      <ip>0x4C33D2F</ip>
+      <obj>/usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so</obj>
+      <fn>realloc</fn>
+    </frame>
+    <frame>
+      <ip>0x685C19C</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+    </frame>
+    <frame>
+      <ip>0x685C681</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+    </frame>
+    <frame>
+      <ip>0x685DFEE</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+    </frame>
+    <frame>
+      <ip>0x685E827</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XlcCreateLC</fn>
+    </frame>
+    <frame>
+      <ip>0x687A66F</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XlcDefaultLoader</fn>
+    </frame>
+    <frame>
+      <ip>0x6865C5D</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XOpenLC</fn>
+    </frame>
+    <frame>
+      <ip>0x6865DAA</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XlcCurrentLC</fn>
+    </frame>
+    <frame>
+      <ip>0x6865DED</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>XSetLocaleModifiers</fn>
+    </frame>
+    <frame>
+      <ip>0x4F048D9</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+    <frame>
+      <ip>0x4F0B47B</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+    <frame>
+      <ip>0x4EDEE5E</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+  </stack>
+</error>
+
+<error>
+  <unique>0x6cb</unique>
+  <tid>1</tid>
+  <kind>Leak_DefinitelyLost</kind>
+  <xwhat>
+    <text>1,688 (136 direct, 1,552 indirect) bytes in 1 blocks are definitely lost in loss record 1,738 of 1,760</text>
+    <leakedbytes>1688</leakedbytes>
+    <leakedblocks>1</leakedblocks>
+  </xwhat>
+  <stack>
+    <frame>
+      <ip>0x4C33D2F</ip>
+      <obj>/usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so</obj>
+      <fn>realloc</fn>
+    </frame>
+    <frame>
+      <ip>0x685C19C</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+    </frame>
+    <frame>
+      <ip>0x685C681</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+    </frame>
+    <frame>
+      <ip>0x685DFEE</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+    </frame>
+    <frame>
+      <ip>0x685E827</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XlcCreateLC</fn>
+    </frame>
+    <frame>
+      <ip>0x687E67F</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XlcUtf8Loader</fn>
+    </frame>
+    <frame>
+      <ip>0x6865C5D</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XOpenLC</fn>
+    </frame>
+    <frame>
+      <ip>0x6865DAA</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>_XlcCurrentLC</fn>
+    </frame>
+    <frame>
+      <ip>0x6865DED</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0</obj>
+      <fn>XSetLocaleModifiers</fn>
+    </frame>
+    <frame>
+      <ip>0x4F0496A</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+    <frame>
+      <ip>0x4F0B47B</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+    <frame>
+      <ip>0x4EDEE5E</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.8.0</obj>
+    </frame>
+  </stack>
+</error>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+  <pair>
+    <count>2</count>
+    <name>X on SUSE11 writev uninit padding</name>
+  </pair>
+</suppcounts>
+
+</valgrindoutput>
+

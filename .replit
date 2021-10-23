@@ -1,0 +1,2 @@
+audio = true
+run = "make build execute"
