@@ -1,7 +1,7 @@
 CC=g++
 
-RELEASE_FLAGS=-O2 -Wall -Wextra
-DEBUG_FLAGS=-g -Wall -Wextra
+RELEASE_FLAGS=-Ofast -Wall -Wextra
+DEBUG_FLAGS=-Og -g -Wall -Wextra
 
 LIBS=-lSDL2 -lGL -lXi -lpthread -lX11 -lXrandr -ldl
 FILES=src/*.cpp src/*.c

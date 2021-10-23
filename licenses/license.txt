@@ -1,0 +1,9 @@
+Please view each licenses.*.txt for the license for each compnent of this application
+This software uses the following libraries not created by the developer:
+
+The SDL 2.0 library (https://www.libsdl.org/index.php)
+The stb headers/library (https://github.com/nothings/stb)
+The glad library (https://github.com/Dav1dde/glad)
+Khronos Group headers (https://github.com/KhronosGroup/EGL-Registry)
+The OpenGL Math Library (GLM) (https://github.com/g-truc/glm)
+The Fast Noise Lite library (https://github.com/Auburn/FastNoiseLite)
