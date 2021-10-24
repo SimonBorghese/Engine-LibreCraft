@@ -18,11 +18,11 @@ debug_build:
 release_build:
 	$(CC) $(RELEASE_FLAGS) $(INCLUDE) $(FILES) $(OTHER) $(LIBS) -o $(PROGRAM_NAME).elf
 
-Release: release_build
+Release:
 	./$(PROGRAM_NAME).elf
 
-Debug: debug_build
-	./$(PROGRAM_NAME).elf > output.txt
+Debug:
+	gdb ./$(PROGRAM_NAME).elf
 
 leak: build
 	valgrind --leak-check=full --xml=yes --xml-file=valgrind.xml ./$(PROGRAM_NAME).elf

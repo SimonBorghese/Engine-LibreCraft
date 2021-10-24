@@ -11,6 +11,8 @@
 #define WIDTH 400
 #define HEIGHT 400
 
+#define VIEWDIST 50
+
 #define FPS 60
 
 using namespace std;
@@ -101,7 +103,7 @@ int main()
     glm::mat4 view(1.0f);
     glm::mat4 projection(1.0f);
 
-    projection = glm::perspective(glm::radians(90.0f), (float) WIDTH/HEIGHT, 0.1f, 40.0f);
+    projection = glm::perspective(glm::radians(90.0f), (float) WIDTH/HEIGHT, 0.1f, (float) VIEWDIST);
 
 
     // Width, height, length
@@ -118,10 +120,17 @@ int main()
     uint32_t fps_c = 0;
 
 
+    uint32_t startStat, endStat;
 
     endRender = SDL_GetTicks();
     lastFrame = endRender;
     glm::vec3 pos;
+    
+    GLint projection_loc = mainShader->getUniformLocation("projection");
+    GLint view_loc = mainShader->getUniformLocation("view");
+    GLint model_loc = mainShader->getUniformLocation("model");
+
+
     while (!(e.type == SDL_QUIT)){
       pos = cam->getPos();
       cam->setPos(glm::vec3(pos.x, world->getBlockHeight(floor(pos.x), floor(pos.z)) + 2, pos.z));
@@ -175,26 +184,36 @@ int main()
 
 
       cam->setView((&view));
-      mainShader->setMatrix4f("view", view);
+      mainShader->setMatrix4f(view_loc, view);
+      mainShader->setMatrix4f(projection_loc, projection);
 
-      mainShader->setMatrix4f("projection", projection);
+
+      
+
+
 
 
       //cubes[0]->rotate(glm::vec3(0.0f, 1.0f, 0.0f), 1.0f);
-
-      for (int x = world->getMaxWidth(); x>0; x--){
-        for (int y = world->getMaxHeight(); y>0; y--){
-          for (int z = world->getMaxTall(); z>0; z--){
+      //startStat = SDL_GetTicks();
+      for (int x = (int) pos.x + VIEWDIST/2; x > (int) pos.x - VIEWDIST/2; x--){
+        for (int y = (int) pos.y + VIEWDIST/2; y>(int) pos.y - VIEWDIST/2; y--){
+          for (int z = (int) pos.z + VIEWDIST/2; z>(int) pos.z - VIEWDIST/2; z--){
+            //printf("Current Pos: %f %f %f\n", pos.x, pos.y, pos.z);
+            //printf("Checking: %d %d %d\n",x,y,z);
             if (world->getRenderState(x,y,z)){
-              model = glm::mat4(1.0f);
-              model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
-              mainShader->setMatrix4f("model", model);
+              if (abs(pos.x - x) < VIEWDIST && abs(pos.y - y) < VIEWDIST && abs(pos.z - z) < VIEWDIST){
+                model = glm::mat4(1.0f);
+                model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
+                mainShader->setMatrix4f(model_loc, model);
 
-              mainRender->renderBasicTriangle(0, 36, mainShader);
+                mainRender->renderBasicTriangle(0, 36, mainShader);
+              }
             }
           }
         }
       }
+      //endStat = SDL_GetTicks();
+      //printf("Full render time: %d\n", endStat - startStat);
 
       //mainRender->renderCubes(cubes, cube_count, mainShader); 
 

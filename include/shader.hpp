@@ -17,7 +17,8 @@ class shader
 
         void useMain();
 
-        void setMatrix4f(const char *unfi_name, const glm::mat4 &mat);
+        GLint getUniformLocation(const char *name);
+        void setMatrix4f(GLint location, const glm::mat4 &mat);
 
         void bindTexture(Image *img, const char *unfi_name, int text);
 

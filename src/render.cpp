@@ -72,11 +72,13 @@ void render::renderTriangle(int start, int amount, shader *shaderProgram){
 }
 
 void render::renderCubes(Cube **cubes, int max_cubes, shader *shaderProgram){
+  GLint *model_lc = (GLint*) malloc(sizeof(GLint));
+  *model_lc = shaderProgram->getUniformLocation("model");
   glBindVertexArray(VAO);
   for (int c = 0; (c < max_cubes); c++){
 
     if (cubes[c] != NULL){
-      shaderProgram->setMatrix4f("model", *cubes[c]->getMat());
+      shaderProgram->setMatrix4f(*model_lc, *cubes[c]->getMat());
       shaderProgram->useMain();
       glDrawArrays(GL_TRIANGLES, 0, 36);
     }
@@ -85,6 +87,7 @@ void render::renderCubes(Cube **cubes, int max_cubes, shader *shaderProgram){
       printf("Warning: Invalid cube caught, exiting loop\n");
     }
   }
+  delete model_lc;
 }
 
 void render::renderBasicTriangle(int start, int amount, shader *shaderProgram){

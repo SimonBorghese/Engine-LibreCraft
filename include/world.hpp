@@ -5,6 +5,7 @@
 #include <time.h>
 #include <limits.h>
 #include "../include/fastnoise/FastNoiseLite.hpp"
+#include "../include/glm/glm.hpp"
 #include <math.h>
 
 #define MAX_SIZE 2000

@@ -68,11 +68,13 @@ void shader::useMain(){
     glUseProgram(mainShader);
 }
 
-void shader::setMatrix4f(const char *unfi_name, const glm::mat4 &mat){
-
-    glUniformMatrix4fv(glGetUniformLocation(mainShader, unfi_name), 1, GL_FALSE, &mat[0][0]);
-
+GLint shader::getUniformLocation(const char *name){
+  return glGetUniformLocation(mainShader, name);
 }
+void shader::setMatrix4f(GLint location, const glm::mat4 &mat){
+  glUniformMatrix4fv(location, 1, GL_FALSE, &mat[0][0]);
+}
+
 
 void shader::bindTexture(Image *img, const char *unfi_name, int text){
   glActiveTexture(img->getImageNum());
