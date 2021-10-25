@@ -13,9 +13,10 @@
 #define WIDTH 400
 #define HEIGHT 400
 
-#define VIEWDIST 50
+#define FPS_TARGET 60
 
-#define FPS 60
+int VIEWDIST = 40;
+
 
 using namespace std;
 
@@ -121,7 +122,7 @@ int main()
 
 
     uint32_t startRender, endRender, deltaTime, lastFrame;
-    uint32_t waitTime = 1000/FPS;
+    uint32_t waitTime = 1000/FPS_TARGET;
     uint32_t fps_c = 0;
 
 
@@ -236,6 +237,12 @@ int main()
       if ((SDL_GetTicks() - lastFrame) >=1000){
         printf("\rFPS: %d  ", fps_c);
         fflush(stdout);
+        if (fps_c < FPS_TARGET){
+          VIEWDIST--;
+        }
+        if (fps_c >= FPS_TARGET){
+          VIEWDIST++;
+        }
         fps_c = 0;
         lastFrame = SDL_GetTicks();
       }
