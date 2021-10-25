@@ -51,7 +51,8 @@ long World::getMaxTall(){
 }
 
 int World::getRenderState(int x, int y, int z){
-  return renderDat[x][y][z];
+  //return renderDat[x][y][z];
+  return (y == ((int)(noise->GetNoise((float)x, (float)z) * NOISE_CONSTANT) + mx_height/2));
 }
 
 void World::destroyBlock(int x, int y, int z){

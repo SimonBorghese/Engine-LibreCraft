@@ -7,6 +7,8 @@
 #include "../include/world.hpp"
 #include "../include/glm/gtc/matrix_transform.hpp"
 #include "../include/glm/gtc/type_ptr.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "../include/glm/ext.hpp"
 
 #define WIDTH 400
 #define HEIGHT 400
@@ -80,6 +82,7 @@ void handleInput();
 
 int main()
 {
+  
     mainRender = new render("UwU Minecraft", WIDTH, HEIGHT);
     mainShader = new shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 
@@ -97,6 +100,8 @@ int main()
     front
     back
     */
+    
+
     mainRender->loadBuffers(vertices, sizeof(vertices), elements, sizeof(elements));
 
     glm::mat4 model(1.0f);
@@ -129,9 +134,15 @@ int main()
     GLint projection_loc = mainShader->getUniformLocation("projection");
     GLint view_loc = mainShader->getUniformLocation("view");
     GLint model_loc = mainShader->getUniformLocation("model");
+    if (GLAD_GL_ARB_compute_shader){
+      printf("Compute Shader available\n");
+    }
 
 
     while (!(e.type == SDL_QUIT)){
+
+      
+      
       pos = cam->getPos();
       cam->setPos(glm::vec3(pos.x, world->getBlockHeight(floor(pos.x), floor(pos.z)) + 2, pos.z));
 
@@ -229,7 +240,7 @@ int main()
         lastFrame = SDL_GetTicks();
       }
       if (deltaTime <= waitTime){
-        //SDL_Delay(waitTime - deltaTime);
+        SDL_Delay(waitTime - deltaTime);
       }
 
 
