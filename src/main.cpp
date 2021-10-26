@@ -7,13 +7,17 @@
 #include "../include/world.hpp"
 #include "../include/glm/gtc/matrix_transform.hpp"
 #include "../include/glm/gtc/type_ptr.hpp"
+#include "../include/glm/gtx/transform.hpp"
+#include "../include/glm/gtx/rotate_vector.hpp"
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include "../include/glm/ext.hpp"
 
 #define WIDTH 400
 #define HEIGHT 400
 
-#define FPS_TARGET 60
+#define NO_FPS_OPTIMIZATION
+#define FPS_TARGET 30
 
 int VIEWDIST = 40;
 
@@ -130,7 +134,7 @@ int main()
 
     endRender = SDL_GetTicks();
     lastFrame = endRender;
-    glm::vec3 pos;
+    glm::vec3 pos, forward, trueForward;
     
     GLint projection_loc = mainShader->getUniformLocation("projection");
     GLint view_loc = mainShader->getUniformLocation("view");
@@ -139,12 +143,13 @@ int main()
       printf("Compute Shader available\n");
     }
 
-
     while (!(e.type == SDL_QUIT)){
 
       
       
       pos = cam->getPos();
+      forward = cam->getForward();
+      trueForward = pos+(forward*2.0f);
       // Uncomment to get fake-physics
       cam->setPos(glm::vec3(pos.x, world->getBlockHeight(floor(pos.x), floor(pos.z)) + 2, pos.z));
 
@@ -175,6 +180,10 @@ int main()
       }
       if (keymap[SDL_SCANCODE_RIGHT]){
         cam->turnRight();
+      }
+      if (keymap[SDL_SCANCODE_SPACE]){
+        world->createBlock(trueForward.x,trueForward.y,trueForward.z, 1);
+
       }
 
       mainRender->clear_screen(0.8f, 1.0f, 1.0f);
@@ -228,6 +237,15 @@ int main()
           }
         }
       }
+
+      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+      model = glm::mat4(1.0f);
+      model = glm::translate(model, glm::vec3((int) trueForward.x,+ (int) trueForward.y, (int) trueForward.z));
+      mainShader->setMatrix4f(model_loc, model);
+
+      mainRender->renderBasicTriangle(0, 36, mainShader);
+      glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+
       //endStat = SDL_GetTicks();
       //printf("Full render time: %d\n", endStat - startStat);
 
@@ -241,12 +259,16 @@ int main()
       if ((SDL_GetTicks() - lastFrame) >=1000){
         printf("\rFPS: %d  ", fps_c);
         fflush(stdout);
+
+        #ifndef NO_FPS_OPTIMIZATION
         if (fps_c < FPS_TARGET){
           VIEWDIST--;
         }
         if (fps_c >= FPS_TARGET){
           VIEWDIST++;
         }
+        #endif
+        
         fps_c = 0;
         lastFrame = SDL_GetTicks();
       }

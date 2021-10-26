@@ -115,6 +115,10 @@ void Camera::setDeltaTime(float newTime){
 glm::vec3 Camera::getPos(){
   return cameraPos;
 }
+
+glm::vec3 Camera::getForward(){
+  return cameraFront;
+}
 void Camera::setPos(glm::vec3 newPos){
   cameraPos = newPos;
 }

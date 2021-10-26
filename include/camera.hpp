@@ -31,6 +31,7 @@ class Camera{
     void setView(glm::mat4 *view);
     
     glm::vec3 getPos();
+    glm::vec3 getForward();
     void setPos(glm::vec3 newPos);
 
 

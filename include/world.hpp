@@ -45,14 +45,15 @@ class World{
     BLOCK_INT getBlockState(int x, int y, int z);
 
     int getBlockHeight(int x, int z);
+
+    void destroyBlock(int x, int y, int z);
+    void createBlock(int x, int y, int z, int type);
   private:
   
 
     std::map<std::tuple<POSITION_INT, POSITION_INT, POSITION_INT>, BLOCK_INT> worldOverrides;
     FastNoiseLite *noise;
 
-    void destroyBlock(int x, int y, int z);
-    void createBlock(int x, int y, int z, int type);
 
     std::tuple<POSITION_INT, POSITION_INT, POSITION_INT> primitivePostoPos(int x, int y, int z);
 };

@@ -22,14 +22,10 @@ BLOCK_INT World::getBlockState(int x, int y, int z){
   //return renderDat[x][y][z];
   
   if (worldOverrides.count(primitivePostoPos(x,y,z))){
-    auto it = worldOverrides.find(primitivePostoPos(x,y,z));
-    if (it != worldOverrides.end()){
-      return (it->second);
-    }
-    else{
-      printf("Returning Noise because not found\n");
-      return y <= ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT));
-    }
+    //auto it = worldOverrides.find(primitivePostoPos(x,y,z));
+    return (1);
+    
+
   }
   else{
     return y <= ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT));
