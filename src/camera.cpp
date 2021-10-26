@@ -15,6 +15,7 @@ void Camera::moveForward(){
   float *tempKeep = (float*) malloc(sizeof(float));
   *tempKeep = cameraPos.y;
   cameraPos += cam_speed * cameraFront * (float) t_deltaTime;
+  // Uncomment to make FPS Cam
   cameraPos.y = *tempKeep;
   delete tempKeep;
 }

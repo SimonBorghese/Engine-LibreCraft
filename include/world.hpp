@@ -7,61 +7,54 @@
 #include "../include/fastnoise/FastNoiseLite.hpp"
 #include "../include/glm/glm.hpp"
 #include <math.h>
+#include <map>
+#include <exception>
 
 #define MAX_SIZE 2000
 #define NOISE_CONSTANT 10
 /*
-World idea:
+New World Idea:
 
-3D array containing block data
-X Y Z
-Texutre to use, block data
+Follow Minecraft Spec chunks 16 * 255 * 16 (x*y*z)
 
-3D array containing render data
-X Y Z
-Wheather the block is rendered or not
+The world should be regenerated as it needs to be loaded in
 
-flat world generation:
-Every value gets dirt
-Every value that has a 0 in one of it's components gets rendered
-Other values become verified unrendered
+When a change is made, it is stored in a seperate array and file where changes are kept
 
-When a block value is changed
-All blocks around get tested
+When the world is loaded, the base version should be loaded first then each block can be overridden as needed
 
-When a block is deleted
-First becomes marked as air
-Already rendered blocks are ignored
-If a verified empty is found, it becomes rendered
+Example:
+What's generated:
+(0,1,1) = 0
+World file has:
+(0,1,1) = 5
+Thus final cordinate is:
+(0,1,1) = 5
+
 */
+
+typedef uint32_t POSITION_INT;
+typedef uint32_t BLOCK_INT;
+
 
 class World{
   public:
-    World(const int width, const int height, const int tall, const long max_width, const long max_height, const long max_tall);
+    World();
     virtual ~World();
 
-    int getWidth();
-    int getHeight();
-    int getTall(); // You grow to 6ft if you call this method
-
-    long getMaxWidth();
-    long getMaxHeight();
-    long getMaxTall();
-
-    int getRenderState(int x, int y, int z);
+    BLOCK_INT getBlockState(int x, int y, int z);
 
     int getBlockHeight(int x, int z);
   private:
-    int w_width, w_height, w_tall;
-    long mx_width, mx_height, mx_tall;
+  
 
-    unsigned char blockDat[MAX_SIZE+1][MAX_SIZE+1][MAX_SIZE+1];
-    unsigned char renderDat[MAX_SIZE+1][MAX_SIZE+1][MAX_SIZE+1];
-
+    std::map<std::tuple<POSITION_INT, POSITION_INT, POSITION_INT>, BLOCK_INT> worldOverrides;
     FastNoiseLite *noise;
 
     void destroyBlock(int x, int y, int z);
     void createBlock(int x, int y, int z, int type);
+
+    std::tuple<POSITION_INT, POSITION_INT, POSITION_INT> primitivePostoPos(int x, int y, int z);
 };
 
 #endif

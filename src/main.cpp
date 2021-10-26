@@ -113,11 +113,11 @@ int main()
 
 
     // Width, height, length
-    world = new World(200,30,200, 200,200,200);
+    world = new World();
     int baseX, baseY, baseZ;
-    baseX = world->getWidth()/2;
-    baseZ = world->getTall()/2;
-    baseY = world->getBlockHeight(baseX, baseZ) + 2;
+    baseX = 0;
+    baseZ = 0;
+    baseY = 0;
     cam = new Camera(glm::vec3(baseX, baseY, baseZ), 0.005f, WIDTH, HEIGHT);
 
 
@@ -145,6 +145,7 @@ int main()
       
       
       pos = cam->getPos();
+      // Uncomment to get fake-physics
       cam->setPos(glm::vec3(pos.x, world->getBlockHeight(floor(pos.x), floor(pos.z)) + 2, pos.z));
 
       startRender = SDL_GetTicks();
@@ -208,11 +209,14 @@ int main()
       //cubes[0]->rotate(glm::vec3(0.0f, 1.0f, 0.0f), 1.0f);
       //startStat = SDL_GetTicks();
       for (int x = (int) pos.x + VIEWDIST/2; x > (int) pos.x - VIEWDIST/2; x--){
-        for (int y = (int) pos.y + VIEWDIST/2; y>(int) pos.y - VIEWDIST/2; y--){
-          for (int z = (int) pos.z + VIEWDIST/2; z>(int) pos.z - VIEWDIST/2; z--){
+        for (int z = (int) pos.z + VIEWDIST/2; z>(int) pos.z - VIEWDIST/2; z--){
+          int highesty = pos.y-(VIEWDIST/2) - 1;
+          for (int y = (int) pos.y + VIEWDIST/2; y>(int) pos.y - VIEWDIST/2; y--){
+
+
             //printf("Current Pos: %f %f %f\n", pos.x, pos.y, pos.z);
-            //printf("Checking: %d %d %d\n",x,y,z);
-            if (world->getRenderState(x,y,z)){
+            if (world->getBlockState(x,y,z) && y > highesty){
+              highesty = y;
               if (abs(pos.x - x) < VIEWDIST && abs(pos.y - y) < VIEWDIST && abs(pos.z - z) < VIEWDIST){
                 model = glm::mat4(1.0f);
                 model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
