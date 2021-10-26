@@ -20,9 +20,11 @@ release_build:
 
 Release:
 	./$(PROGRAM_NAME).elf
+  git rm Engine.elf
 
 Debug:
-	gdb ./$(PROGRAM_NAME).elf
+	./$(PROGRAM_NAME).elf
+  
 
 leak: build
 	valgrind --leak-check=full --xml=yes --xml-file=valgrind.xml ./$(PROGRAM_NAME).elf
