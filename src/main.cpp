@@ -19,7 +19,7 @@
 #define NO_FPS_OPTIMIZATION
 #define FPS_TARGET 30
 
-int VIEWDIST = 40;
+int VIEWDIST = 30;
 
 
 using namespace std;
@@ -91,12 +91,12 @@ int main()
     mainRender = new render("UwU Minecraft", WIDTH, HEIGHT);
     mainShader = new shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 
-    bottom = new Image("dirt.jpg", GL_TEXTURE0, GL_RGB,0);
-    top = new Image("sand.jpg", GL_TEXTURE1, GL_RGB,0);
-    left_t = new Image("sidedirt.jpg", GL_TEXTURE2, GL_RGB, 1);
-    right_t = new Image("sidedirt.jpg", GL_TEXTURE3, GL_RGB, 1);
-    front = new Image("sidedirt.jpg", GL_TEXTURE4, GL_RGB, 0);
-    back = new Image("sidedirt.jpg", GL_TEXTURE5, GL_RGB, 0);
+    bottom = new Image("textures/dirt.jpg", GL_TEXTURE0, GL_RGB,0);
+    top = new Image("textures/sand.jpg", GL_TEXTURE1, GL_RGB,0);
+    left_t = new Image("textures/sidedirt.jpg", GL_TEXTURE2, GL_RGB, 1);
+    right_t = new Image("textures/sidedirt.jpg", GL_TEXTURE3, GL_RGB, 1);
+    front = new Image("textures/sidedirt.jpg", GL_TEXTURE4, GL_RGB, 0);
+    back = new Image("textures/sidedirt.jpg", GL_TEXTURE5, GL_RGB, 0);
     /*
     bottom
     top
@@ -139,6 +139,10 @@ int main()
     GLint projection_loc = mainShader->getUniformLocation("projection");
     GLint view_loc = mainShader->getUniformLocation("view");
     GLint model_loc = mainShader->getUniformLocation("model");
+
+    GLint wire_loc = mainShader->getUniformLocation("useWire");
+
+    
     if (GLAD_GL_ARB_compute_shader){
       printf("Compute Shader available\n");
     }
@@ -151,7 +155,12 @@ int main()
       forward = cam->getForward();
       trueForward = pos+(forward*2.0f);
       // Uncomment to get fake-physics
-      cam->setPos(glm::vec3(pos.x, world->getBlockHeight(floor(pos.x), floor(pos.z)) + 2, pos.z));
+      if (cam->getYaw() > 0.0){
+        cam->setPos(glm::vec3(pos.x, world->getBlockHeight(ceil(pos.x), ceil(pos.z)) + 2, pos.z));
+      }
+      else{
+        cam->setPos(glm::vec3(pos.x, world->getBlockHeight(floor(pos.x), floor(pos.z)) + 2, pos.z));
+      }
 
       startRender = SDL_GetTicks();
       SDL_PollEvent(&e);
@@ -181,9 +190,11 @@ int main()
       if (keymap[SDL_SCANCODE_RIGHT]){
         cam->turnRight();
       }
-      if (keymap[SDL_SCANCODE_SPACE]){
+      if (keymap[SDL_SCANCODE_Z]){
         world->createBlock(trueForward.x,trueForward.y,trueForward.z, 1);
-
+      }
+      if (keymap[SDL_SCANCODE_X]){
+        world->destroyBlock(trueForward.x,trueForward.y,trueForward.z);
       }
 
       mainRender->clear_screen(0.8f, 1.0f, 1.0f);
@@ -208,12 +219,11 @@ int main()
       cam->setView((&view));
       mainShader->setMatrix4f(view_loc, view);
       mainShader->setMatrix4f(projection_loc, projection);
-
-
       
 
 
 
+      mainShader->setInt(wire_loc, 0);
 
       //cubes[0]->rotate(glm::vec3(0.0f, 1.0f, 0.0f), 1.0f);
       //startStat = SDL_GetTicks();
@@ -238,9 +248,14 @@ int main()
         }
       }
 
+
+      mainShader->setInt(wire_loc, 1);
       glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
       model = glm::mat4(1.0f);
+      
       model = glm::translate(model, glm::vec3((int) trueForward.x,+ (int) trueForward.y, (int) trueForward.z));
+  
+
       mainShader->setMatrix4f(model_loc, model);
 
       mainRender->renderBasicTriangle(0, 36, mainShader);

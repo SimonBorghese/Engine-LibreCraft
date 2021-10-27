@@ -34,6 +34,9 @@ class Camera{
     glm::vec3 getForward();
     void setPos(glm::vec3 newPos);
 
+    float getPitch();
+    float getYaw();
+
 
   private:
     float cam_speed;

@@ -1,6 +1,6 @@
 #include "../include/camera.hpp"
 
-Camera::Camera(glm::vec3 newCameraPos, float speed, int WIN_WIDTH, int WIN_HEIGHT) : cameraPos(newCameraPos), cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)), cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),  up(glm::vec3(0.0f, 1.0f, 0.0f)), right(glm::vec3(1.0f, 0.0f, 0.0f)), cam_speed(speed), yaw_t(-90.0f), pitch_t(0.0f), t_deltaTime(1.0f){
+Camera::Camera(glm::vec3 newCameraPos, float speed, int WIN_WIDTH, int WIN_HEIGHT) : cameraPos(newCameraPos), cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)), cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),  up(glm::vec3(0.0f, 1.0f, 0.0f)), right(glm::vec3(1.0f, 0.0f, 0.0f)), cam_speed(speed), yaw_t(90.0f), pitch_t(0.0f), t_deltaTime(1.0f){
 
 }
 Camera::~Camera(){
@@ -78,6 +78,10 @@ void Camera::turnLeft(){
   if (pitch_t < -89.0f)
       pitch_t = -89.0f;
 
+  if (yaw_t <= 0){
+    yaw_t = 360;
+  }
+
   glm::vec3 front;
   front.x = cos(glm::radians(yaw_t)) * cos(glm::radians(pitch_t));
   front.y = sin(glm::radians(pitch_t));
@@ -94,6 +98,11 @@ void Camera::turnRight(){
       pitch_t = 89.0f;
   if (pitch_t < -89.0f)
       pitch_t = -89.0f;
+
+  if (yaw_t >= 360){
+    yaw_t = 0;
+  }
+
 
   glm::vec3 front;
   front.x = cos(glm::radians(yaw_t)) * cos(glm::radians(pitch_t));
@@ -121,4 +130,11 @@ glm::vec3 Camera::getForward(){
 }
 void Camera::setPos(glm::vec3 newPos){
   cameraPos = newPos;
+}
+
+float Camera::getPitch(){
+  return pitch_t;
+}
+float Camera::getYaw(){
+  return yaw_t;
 }

@@ -12,7 +12,10 @@ uniform sampler2D text3;
 uniform sampler2D text4;
 uniform sampler2D text5;
 
+uniform int useWire;
+
 void main(){
+if (useWire == 0){
   if (textNum == 0.0f){
     FragColor = texture(text0, textCord);
   }
@@ -31,5 +34,9 @@ void main(){
   if (textNum == 5.0f){
     FragColor = texture(text5, textCord);
   }
+}
+else{
+  FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+}
     //FragColor = vec4(textCord.x, textCord.y, 0.8f, 1.0f);
 }

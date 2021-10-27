@@ -20,7 +20,7 @@ release_build:
 
 Release:
 	./$(PROGRAM_NAME).elf
-  git rm Engine.elf
+	git rm Engine.elf
 
 Debug:
 	./$(PROGRAM_NAME).elf

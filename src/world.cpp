@@ -22,10 +22,7 @@ BLOCK_INT World::getBlockState(int x, int y, int z){
   //return renderDat[x][y][z];
   
   if (worldOverrides.count(primitivePostoPos(x,y,z))){
-    //auto it = worldOverrides.find(primitivePostoPos(x,y,z));
-    return (1);
-    
-
+    return (worldOverrides[primitivePostoPos(x,y,z)]);
   }
   else{
     return y <= ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT));
@@ -33,14 +30,20 @@ BLOCK_INT World::getBlockState(int x, int y, int z){
 }
 
 void World::destroyBlock(int x, int y, int z){
-  worldOverrides.insert(std::pair<std::tuple<POSITION_INT,POSITION_INT,POSITION_INT>, BLOCK_INT>(primitivePostoPos(x,y,z), 0));
+  createBlock(x,y,z,0);
 }
 std::tuple<POSITION_INT,POSITION_INT,POSITION_INT> World::primitivePostoPos(int x, int y, int z){
   std::tuple<POSITION_INT,POSITION_INT,POSITION_INT> tempPos(x,y,z);
   return tempPos;
 }
 void World::createBlock(int x, int y, int z, int type){
-  worldOverrides.insert(std::pair<std::tuple<POSITION_INT,POSITION_INT,POSITION_INT>, BLOCK_INT>(primitivePostoPos(x,y,z), type));
+
+  if (!worldOverrides.count(primitivePostoPos(x,y,z))){
+    worldOverrides.insert(std::pair<std::tuple<POSITION_INT,POSITION_INT,POSITION_INT>, BLOCK_INT>(primitivePostoPos(x,y,z), type));
+  }
+  else{
+    worldOverrides[primitivePostoPos(x,y,z)] = type;
+  }
 }
 
 
