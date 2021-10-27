@@ -48,6 +48,11 @@ void World::createBlock(int x, int y, int z, int type){
 
 
 int World::getBlockHeight(int x, int z){
-   return ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT)) ;
+  return ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT)) ;
+}
 
+// 1 = is world
+// 0 = is user
+int World::isWorldOrUser(int x, int y, int z){
+  return ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT)) == y;
 }

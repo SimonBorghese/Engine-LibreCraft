@@ -48,10 +48,13 @@ class World{
 
     void destroyBlock(int x, int y, int z);
     void createBlock(int x, int y, int z, int type);
+
+    int isWorldOrUser(int x, int y, int z);
   private:
   
 
     std::map<std::tuple<POSITION_INT, POSITION_INT, POSITION_INT>, BLOCK_INT> worldOverrides;
+
     FastNoiseLite *noise;
 
 

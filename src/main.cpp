@@ -155,12 +155,17 @@ int main()
       forward = cam->getForward();
       trueForward = pos+(forward*2.0f);
       // Uncomment to get fake-physics
-      if (cam->getYaw() > 0.0){
-        cam->setPos(glm::vec3(pos.x, world->getBlockHeight(ceil(pos.x), ceil(pos.z)) + 2, pos.z));
+      int blockHeight = world->getBlockHeight(round(pos.x), round(pos.z));
+      if (blockHeight != -1000){
+        cam->setPos(glm::vec3(pos.x, world->getBlockHeight(round(pos.x), round(pos.z)) + 2, pos.z));
       }
-      else{
-        cam->setPos(glm::vec3(pos.x, world->getBlockHeight(floor(pos.x), floor(pos.z)) + 2, pos.z));
-      }
+      
+      //if (cam->getYaw() > 0.0){
+      //  cam->setPos(glm::vec3(pos.x, world->getBlockHeight(ceil(pos.x), ceil(pos.z)) + 2, pos.z));
+      //}
+      //else{
+      //  cam->setPos(glm::vec3(pos.x, world->getBlockHeight(floor(pos.x), floor(pos.z)) + 2, pos.z));
+      //}
 
       startRender = SDL_GetTicks();
       SDL_PollEvent(&e);
@@ -234,9 +239,20 @@ int main()
 
 
             //printf("Current Pos: %f %f %f\n", pos.x, pos.y, pos.z);
-            if (world->getBlockState(x,y,z) && y > highesty){
+            if (world->isWorldOrUser(x,y,z)){
+            if (world->getBlockState(x,y,z) && y > highesty) {
               highesty = y;
               if (abs(pos.x - x) < VIEWDIST && abs(pos.y - y) < VIEWDIST && abs(pos.z - z) < VIEWDIST){
+                model = glm::mat4(1.0f);
+                model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
+                mainShader->setMatrix4f(model_loc, model);
+
+                mainRender->renderBasicTriangle(0, 36, mainShader);
+              }
+            }
+            }
+            else{
+              if (world->getBlockState(x,y,z)){
                 model = glm::mat4(1.0f);
                 model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
                 mainShader->setMatrix4f(model_loc, model);
