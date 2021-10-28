@@ -1,0 +1,10 @@
+Test: new rendering code:
+
+Step 1:
+Make a way to have many VAOs
+
+Step 2:
+Re-Do World generation to generate world verticies into VAOs
+
+Step 3:
+Create a new system to real-time load in chunks

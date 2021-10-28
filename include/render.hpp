@@ -9,6 +9,10 @@
 #include <iostream>
 #include <vector>
 
+/*
+
+*/
+
 
 class render
 {
@@ -16,7 +20,7 @@ class render
         render(const char *winTitle, unsigned int width, unsigned int height);
         virtual ~render();
 
-        void loadBuffers(float *verticies_buffer, size_t size_vex, int *elements_buffer, size_t size_element);
+        void loadBuffers(struct VertexArr *mainArr, float *verticies_buffer, size_t size_vex, int *elements_buffer, size_t size_element);
 
         void renderTriangle(int start, int amount);
 
@@ -24,7 +28,7 @@ class render
 
         void renderCubes(Cube **cubes, int max_cubes, shader *shaderProgram);
 
-        void bindCurrentVAO();
+        void bindCurrentVAO(struct VertexArr *arr);
 
         void clear_screen(float r, float g, float b);
 
@@ -40,6 +44,12 @@ class render
         SDL_Event e;
         // The vertex array, vertex buffer, and element buffer objects
         unsigned int VAO, VBO, EBO;
+};
+
+struct VertexArr{
+  unsigned int VAO;
+  unsigned int VBO;
+  unsigned int EBO;
 };
 
 #endif // RENDER_H

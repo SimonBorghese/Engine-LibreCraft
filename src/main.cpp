@@ -85,6 +85,8 @@ SDL_Event e;
 
 void handleInput();
 
+VertexArr baseVAO;
+
 int main()
 {
   
@@ -107,7 +109,7 @@ int main()
     */
     
 
-    mainRender->loadBuffers(vertices, sizeof(vertices), elements, sizeof(elements));
+    mainRender->loadBuffers(&baseVAO, vertices, sizeof(vertices), elements, sizeof(elements));
 
     glm::mat4 model(1.0f);
     glm::mat4 view(1.0f);
@@ -151,7 +153,7 @@ int main()
 
 
     mainShader->useMain();
-    mainRender->bindCurrentVAO();
+    mainRender->bindCurrentVAO(&baseVAO);
     while (!(e.type == SDL_QUIT)){
 
       

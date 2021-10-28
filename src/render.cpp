@@ -1,5 +1,6 @@
 #include "../include/render.hpp"
 
+
 render::render(const char *winTitle, unsigned int width, unsigned int height)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
@@ -40,15 +41,15 @@ render::~render()
     SDL_Quit();
 }
 
-void render::loadBuffers(float *verticies_buffer, size_t size_vex, int *elements_buffer, size_t size_element){
+void render::loadBuffers(VertexArr *mainArr, float *verticies_buffer, size_t size_vex, int *elements_buffer, size_t size_element){
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    glGenVertexArrays(1, &mainArr->VAO);
+    glGenBuffers(1, &mainArr->VBO);
+    glGenBuffers(1, &mainArr->EBO);
 
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBindVertexArray(mainArr->VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, mainArr->VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mainArr->EBO);
 
     glBufferData(GL_ARRAY_BUFFER, size_vex, verticies_buffer, GL_DYNAMIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_element, elements_buffer, GL_DYNAMIC_DRAW);
@@ -109,6 +110,6 @@ int render::getCloseStatus(){
   return (e.type == SDL_QUIT);
 }
 
-void render::bindCurrentVAO(){
-  glBindVertexArray(VAO);
+void render::bindCurrentVAO(VertexArr *arr){
+  glBindVertexArray(arr->VAO);
 }
