@@ -13,8 +13,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "../include/glm/ext.hpp"
 
-#define WIDTH 400
-#define HEIGHT 400
+#define WIDTH 300
+#define HEIGHT 300
 
 #define NO_FPS_OPTIMIZATION
 #define FPS_TARGET 30
@@ -30,7 +30,7 @@ Image *top, *bottom, *left_t, *right_t, *front, *back;
 
 
 float vertices[] = {
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 
      0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
      0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,
      0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,
@@ -147,6 +147,11 @@ int main()
       printf("Compute Shader available\n");
     }
 
+    int posChanged = 1;
+
+
+    mainShader->useMain();
+    mainRender->bindCurrentVAO();
     while (!(e.type == SDL_QUIT)){
 
       
@@ -155,9 +160,18 @@ int main()
       forward = cam->getForward();
       trueForward = pos+(forward*2.0f);
       // Uncomment to get fake-physics
-      int blockHeight = world->getBlockHeight(round(pos.x), round(pos.z));
-      if (blockHeight != -1000){
-        cam->setPos(glm::vec3(pos.x, world->getBlockHeight(round(pos.x), round(pos.z)) + 2, pos.z));
+      if (!world->getBlockState(pos.x, pos.y-2, pos.z)){
+          cam->setPos(glm::vec3(pos.x, pos.y-0.5, pos.z));
+      }
+      if (posChanged){
+        //cam->setPos(glm::vec3(pos.x, world->getBlockHeight(round(pos.x),  round(pos.z)) + 2, pos.z));
+        if (world->getBlockState(pos.x, pos.y-1, pos.z)){
+          cam->setPos(glm::vec3(pos.x, pos.y+1, pos.z));
+        }
+        if (world->getBlockState(pos.x, pos.y, pos.z)){
+          cam->setPos(glm::vec3(pos.x, pos.y+2, pos.z));
+        }
+        posChanged = 0;
       }
       
       //if (cam->getYaw() > 0.0){
@@ -169,37 +183,54 @@ int main()
 
       startRender = SDL_GetTicks();
       SDL_PollEvent(&e);
-      keymap = SDL_GetKeyboardState(NULL);
       cam->setDeltaTime((float) deltaTime);
+
+        //begin input code
+      keymap = SDL_GetKeyboardState(NULL);
       if (keymap[SDL_SCANCODE_W]){
         cam->moveForward();
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_S]){
         cam->moveBackward();
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_A]){
         cam->strafeLeft();
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_D]){
         cam->strafeRight();
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_UP]){
         cam->moveUp();
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_DOWN]){
         cam->moveDown();
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_LEFT]){
         cam->turnLeft();
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_RIGHT]){
         cam->turnRight();
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_Z]){
         world->createBlock(trueForward.x,trueForward.y,trueForward.z, 1);
+        posChanged = 1;
       }
       if (keymap[SDL_SCANCODE_X]){
         world->destroyBlock(trueForward.x,trueForward.y,trueForward.z);
+        posChanged = 1;
+      }
+      if (keymap[SDL_SCANCODE_SPACE]){
+        pos = cam->getPos();
+        cam->setPos(glm::vec3(pos.x, pos.y+2, pos.z));
+        posChanged = 1;
       }
 
       mainRender->clear_screen(0.8f, 1.0f, 1.0f);
@@ -232,6 +263,7 @@ int main()
 
       //cubes[0]->rotate(glm::vec3(0.0f, 1.0f, 0.0f), 1.0f);
       //startStat = SDL_GetTicks();
+      int draws = 0;
       for (int x = (int) pos.x + VIEWDIST/2; x > (int) pos.x - VIEWDIST/2; x--){
         for (int z = (int) pos.z + VIEWDIST/2; z>(int) pos.z - VIEWDIST/2; z--){
           int highesty = pos.y-(VIEWDIST/2) - 1;
@@ -247,7 +279,8 @@ int main()
                 model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
                 mainShader->setMatrix4f(model_loc, model);
 
-                mainRender->renderBasicTriangle(0, 36, mainShader);
+                mainRender->renderBasicTriangle(0, 36);
+                draws++;
               }
             }
             }
@@ -257,12 +290,16 @@ int main()
                 model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
                 mainShader->setMatrix4f(model_loc, model);
 
-                mainRender->renderBasicTriangle(0, 36, mainShader);
+                mainRender->renderBasicTriangle(0, 36);
               }
             }
           }
         }
       }
+
+      //printf("Drew: %d\n", draws);
+      draws = 0;
+      
 
 
       mainShader->setInt(wire_loc, 1);
@@ -274,7 +311,7 @@ int main()
 
       mainShader->setMatrix4f(model_loc, model);
 
-      mainRender->renderBasicTriangle(0, 36, mainShader);
+      mainRender->renderBasicTriangle(0, 36);
       glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
       //endStat = SDL_GetTicks();

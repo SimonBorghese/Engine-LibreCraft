@@ -24,9 +24,9 @@ render::render(const char *winTitle, unsigned int width, unsigned int height)
     glEnable(GL_DEPTH_TEST);
 
 
-    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 128);
-    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 128);
-    //glEnable(GL_MULTISAMPLE);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    glEnable(GL_MULTISAMPLE);
 
 
     //glEnable(GL_CULL_FACE);  
@@ -65,21 +65,20 @@ void render::loadBuffers(float *verticies_buffer, size_t size_vex, int *elements
 
 }
 
-void render::renderTriangle(int start, int amount, shader *shaderProgram){
-    shaderProgram->useMain();
-    glBindVertexArray(VAO);
+void render::renderTriangle(int start, int amount){
     glDrawElements(GL_TRIANGLES, amount, GL_UNSIGNED_INT, (void*) start);
 }
 
 void render::renderCubes(Cube **cubes, int max_cubes, shader *shaderProgram){
   GLint *model_lc = (GLint*) malloc(sizeof(GLint));
   *model_lc = shaderProgram->getUniformLocation("model");
+  shaderProgram->useMain();
+
   glBindVertexArray(VAO);
   for (int c = 0; (c < max_cubes); c++){
 
     if (cubes[c] != NULL){
       shaderProgram->setMatrix4f(*model_lc, *cubes[c]->getMat());
-      shaderProgram->useMain();
       glDrawArrays(GL_TRIANGLES, 0, 36);
     }
     else{
@@ -90,9 +89,7 @@ void render::renderCubes(Cube **cubes, int max_cubes, shader *shaderProgram){
   delete model_lc;
 }
 
-void render::renderBasicTriangle(int start, int amount, shader *shaderProgram){
-  shaderProgram->useMain();
-  glBindVertexArray(VAO);
+void render::renderBasicTriangle(int start, int amount){
   glDrawArrays(GL_TRIANGLES, start, amount);
   
 }
@@ -110,4 +107,8 @@ void render::update(){
 int render::getCloseStatus(){
   SDL_PollEvent(&e);
   return (e.type == SDL_QUIT);
+}
+
+void render::bindCurrentVAO(){
+  glBindVertexArray(VAO);
 }

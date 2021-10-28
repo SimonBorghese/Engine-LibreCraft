@@ -18,11 +18,13 @@ class render
 
         void loadBuffers(float *verticies_buffer, size_t size_vex, int *elements_buffer, size_t size_element);
 
-        void renderTriangle(int start, int amount, shader *shaderProgram);
+        void renderTriangle(int start, int amount);
 
-        void renderBasicTriangle(int start, int amount, shader *shaderProgram);
+        void renderBasicTriangle(int start, int amount);
 
         void renderCubes(Cube **cubes, int max_cubes, shader *shaderProgram);
+
+        void bindCurrentVAO();
 
         void clear_screen(float r, float g, float b);
 
