@@ -50,6 +50,9 @@ class World{
     void createBlock(int x, int y, int z, int type);
 
     int isWorldOrUser(int x, int y, int z);
+
+    // Returns size of target
+    float* generateAVao(const float *baseVerticies, int *outputLen, int startVertexPos, int endVertexPos, int baseSize, int stride, int xStart, int yStart, int zStart, int xEnd, int yEnd, int zEnd);
   private:
   
 

@@ -13,13 +13,13 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "../include/glm/ext.hpp"
 
-#define WIDTH 300
-#define HEIGHT 300
+#define WIDTH 600
+#define HEIGHT 400
 
 #define NO_FPS_OPTIMIZATION
 #define FPS_TARGET 30
 
-int VIEWDIST = 30;
+int VIEWDIST = 50;
 
 
 using namespace std;
@@ -83,9 +83,10 @@ const uint8_t *keymap;
 
 SDL_Event e;
 
-void handleInput();
-
 VertexArr baseVAO;
+
+float *testVerticies, *output;
+int outputsize;
 
 int main()
 {
@@ -108,8 +109,7 @@ int main()
     back
     */
     
-
-    mainRender->loadBuffers(&baseVAO, vertices, sizeof(vertices), elements, sizeof(elements));
+    
 
     glm::mat4 model(1.0f);
     glm::mat4 view(1.0f);
@@ -120,6 +120,16 @@ int main()
 
     // Width, height, length
     world = new World();
+    
+
+    printf("Generating VAO\n");
+    // HERE IS OUR VAO CODE
+    output = world->generateAVao(vertices,&outputsize, 0, 3, sizeof(vertices), 6, -20, -20, -20, 20, 20, 20);
+    printf("Finished VAO\n");
+
+    printf("Loading Buffers\n");
+    mainRender->loadBuffers(&baseVAO, output,outputsize*sizeof(float), elements, sizeof(elements));
+    printf("Loaded Buffers\n");
     int baseX, baseY, baseZ;
     baseX = 0;
     baseZ = 0;
@@ -154,6 +164,9 @@ int main()
 
     mainShader->useMain();
     mainRender->bindCurrentVAO(&baseVAO);
+
+    mainShader->setMatrix4f(projection_loc, projection);
+
     while (!(e.type == SDL_QUIT)){
 
       
@@ -256,54 +269,17 @@ int main()
 
       cam->setView((&view));
       mainShader->setMatrix4f(view_loc, view);
-      mainShader->setMatrix4f(projection_loc, projection);
       
 
 
 
       mainShader->setInt(wire_loc, 0);
 
-      //cubes[0]->rotate(glm::vec3(0.0f, 1.0f, 0.0f), 1.0f);
-      //startStat = SDL_GetTicks();
-      int draws = 0;
-      for (int x = (int) pos.x + VIEWDIST/2; x > (int) pos.x - VIEWDIST/2; x--){
-        for (int z = (int) pos.z + VIEWDIST/2; z>(int) pos.z - VIEWDIST/2; z--){
-          int highesty = pos.y-(VIEWDIST/2) - 1;
-          for (int y = (int) pos.y + VIEWDIST/2; y>(int) pos.y - VIEWDIST/2; y--){
+      model = glm::mat4(1.0f);
+      mainShader->setMatrix4f(model_loc, model);
+      mainRender->renderBasicTriangle(0, outputsize);
 
-
-            //printf("Current Pos: %f %f %f\n", pos.x, pos.y, pos.z);
-            if (world->isWorldOrUser(x,y,z)){
-            if (world->getBlockState(x,y,z) && y > highesty) {
-              highesty = y;
-              if (abs(pos.x - x) < VIEWDIST && abs(pos.y - y) < VIEWDIST && abs(pos.z - z) < VIEWDIST){
-                model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
-                mainShader->setMatrix4f(model_loc, model);
-
-                mainRender->renderBasicTriangle(0, 36);
-                draws++;
-              }
-            }
-            }
-            else{
-              if (world->getBlockState(x,y,z)){
-                model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3(0.0f + x, 0.0f+ y, 0.0f + z));
-                mainShader->setMatrix4f(model_loc, model);
-
-                mainRender->renderBasicTriangle(0, 36);
-              }
-            }
-          }
-        }
-      }
-
-      //printf("Drew: %d\n", draws);
-      draws = 0;
-      
-
-
+      /*
       mainShader->setInt(wire_loc, 1);
       glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
       model = glm::mat4(1.0f);
@@ -315,11 +291,9 @@ int main()
 
       mainRender->renderBasicTriangle(0, 36);
       glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+      */
 
-      //endStat = SDL_GetTicks();
-      //printf("Full render time: %d\n", endStat - startStat);
 
-      //mainRender->renderCubes(cubes, cube_count, mainShader); 
 
       mainRender->update();
       endRender = SDL_GetTicks();

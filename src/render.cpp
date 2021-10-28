@@ -25,9 +25,9 @@ render::render(const char *winTitle, unsigned int width, unsigned int height)
     glEnable(GL_DEPTH_TEST);
 
 
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-    glEnable(GL_MULTISAMPLE);
+    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    //SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    //glEnable(GL_MULTISAMPLE);
 
 
     //glEnable(GL_CULL_FACE);  
