@@ -67,6 +67,9 @@ float* World::generateAVao(const float *baseVerticies, int *outputLen, int start
   // Stores the target verticies
   float *targetVerticies;
 
+  //Stores highest y
+  int highesty;
+
   // Calculate the target size
   int targetSize = (baseSize);
   targetSize *= (zEnd-zStart);
@@ -77,33 +80,37 @@ float* World::generateAVao(const float *baseVerticies, int *outputLen, int start
 
   for (int x = xStart; x<xEnd; x++){
     for (int y = yStart; y<yEnd; y++){
-    for (int z = zStart; z<zEnd; z++){
-      for (int c = 0; c<(baseSize/sizeof(float))/stride; c++){
-        // If the block is valid
-        if (getBlockState(x,y, z) != 0){
-        for (int ver = startVertexPos; ver<endVertexPos; ver++){
-          setPos_c = ((c*stride)+ver);
-          switch (ver){
-            case 0:
-              targetVerticies[currentPos] = baseVerticies[setPos_c] + x;
-            break;
-            case 1:
-              targetVerticies[currentPos] = baseVerticies[setPos_c] + y;
-            break;
+      highesty = yStart- 1;
+      for (int z = zStart; z<zEnd; z++){
+        if (isWorldOrUser(x,y,z) || (getBlockState(x,y,z) && y > highesty)){
+        highesty = y;
+        for (int c = 0; c<(baseSize/sizeof(float))/stride; c++){
+          // If the block is valid
 
-            case 2:
-              targetVerticies[currentPos] = baseVerticies[setPos_c] + z;
-            break;
-          }
-          currentPos++;
-        }
-        for (int ver2 = stride-endVertexPos; ver2<stride; ver2++){
-          setPos_c = ((c*stride)+ver2);
-          targetVerticies[currentPos] = baseVerticies[setPos_c];
-          currentPos++;
-        }
+            for (int ver = startVertexPos; ver<endVertexPos; ver++){
+              setPos_c = ((c*stride)+ver);
+              switch (ver){
+                case 0:
+                  targetVerticies[currentPos] = baseVerticies[setPos_c] + x;
+                break;
+                case 1:
+                  targetVerticies[currentPos] = baseVerticies[setPos_c] + y;
+                break;
+
+                case 2:
+                  targetVerticies[currentPos] = baseVerticies[setPos_c] + z;
+                break;
+              }
+              currentPos++;
+            }
+            for (int ver2 = stride-endVertexPos; ver2<stride; ver2++){
+              setPos_c = ((c*stride)+ver2);
+              targetVerticies[currentPos] = baseVerticies[setPos_c];
+              currentPos++;
+            }
+        
       }
-    }
+        }
     }
     }
   }

@@ -123,7 +123,6 @@ int main()
     
 
     printf("Generating VAO\n");
-    // HERE IS OUR VAO CODE
     output = world->generateAVao(vertices,&outputsize, 0, 3, sizeof(vertices), 6, -20, -20, -20, 20, 20, 20);
     printf("Finished VAO\n");
 
