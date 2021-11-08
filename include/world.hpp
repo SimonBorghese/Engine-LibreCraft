@@ -12,6 +12,7 @@
 
 #define MAX_SIZE 2000
 #define NOISE_CONSTANT 10
+#define NOISE_FIXER 10
 /*
 New World Idea:
 

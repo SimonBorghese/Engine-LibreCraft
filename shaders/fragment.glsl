@@ -16,24 +16,52 @@ uniform int useWire;
 
 void main(){
 if (useWire == 0){
+  switch(int(textNum)){
+    case 0:
+      FragColor = texture(text0, textCord);
+    break;
+    case 1:
+      FragColor = texture(text1, textCord);
+    break;
+    case 2:
+      FragColor = texture(text2, textCord);
+    break;
+    case 3:
+      FragColor = texture(text3, textCord);
+    break;
+    case 4:
+      FragColor = texture(text4, textCord);
+    break;
+    case 5:
+      FragColor = texture(text5, textCord);
+    break;
+
+  }
+  /*
   if (textNum == 0.0f){
     FragColor = texture(text0, textCord);
   }
-  if (textNum == 1.0f){
+  else if (textNum == 1.0f){
     FragColor = texture(text1, textCord);
   }
-  if (textNum == 2.0f){
+  else if (textNum == 2.0f){
     FragColor = texture(text2, textCord);
   }
-  if (textNum == 3.0f){
+  else if (textNum == 3.0f){
     FragColor = texture(text3, textCord);
   }
-  if (textNum == 4.0f){
+  else if (textNum == 4.0f){
     FragColor = texture(text4, textCord);
   }
-  if (textNum == 5.0f){
+  else if (textNum == 5.0f){
     FragColor = texture(text5, textCord);
   }
+  else{
+    FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  }
+  */
+  
+  //FragColor = texture(text0, textCord);
 }
 else{
   FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);

@@ -35,7 +35,7 @@ shader::shader(const char *vertexFile, const char *fragmentFile)
 
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success){
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         printf("Fragment Shader Error: %s\n", infoLog);
     }
 
@@ -57,6 +57,84 @@ shader::shader(const char *vertexFile, const char *fragmentFile)
     delete trueFSource;
     delete (shaderF);
     delete (shaderV);
+}
+
+shader::shader(const char *vertexFile, const char *geometryFile, const char *fragmentFile){
+  std::ifstream *shaderV = new std::ifstream(vertexFile, std::ios::binary);
+  std::ifstream *shaderG = new std::ifstream(geometryFile, std::ios::binary);
+  std::ifstream *shaderF = new std::ifstream(fragmentFile, std::ios::binary);
+
+  std::string *shaderV_str = new std::string;
+  shaderV_str->assign( (std::istreambuf_iterator<char>(*shaderV) ), (std::istreambuf_iterator<char>()    ) );
+
+  std::string *shaderG_str = new std::string;
+  shaderG_str->assign( (std::istreambuf_iterator<char>(*shaderG) ), (std::istreambuf_iterator<char>()    ) );
+
+  std::string *shaderF_str = new std::string;
+  shaderF_str->assign( (std::istreambuf_iterator<char>(*shaderF) ), (std::istreambuf_iterator<char>()    ) );
+
+  vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  mainShader = glCreateProgram();
+
+  const char *trueVSource = shaderV_str->append("\0").c_str();
+  const char *trueGSource = shaderV_str->append("\0").c_str();
+  const char *trueFSource = shaderF_str->append("\0").c_str();
+
+  glShaderSource(vertexShader, 1, &trueVSource, NULL);
+  glShaderSource(geometryShader, 1, &trueGSource, NULL);
+  glShaderSource(fragmentShader, 1, &trueFSource, NULL);
+
+
+  glCompileShader(vertexShader);
+  glCompileShader(geometryShader);
+  glCompileShader(fragmentShader);
+
+  int success;
+  char infoLog[512];
+
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  if (!success){
+    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+    printf("Vertex Shader Error: %s\n", infoLog);
+  }
+
+  glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &success);
+  if (!success){
+    glGetShaderInfoLog(geometryShader, 512, NULL, infoLog);
+    printf("Geometry Shader Error: %s\n", infoLog);
+  }
+
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+  if (!success){
+    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+    printf("Fragment Shader Error: %s\n", infoLog);
+  }
+
+  glAttachShader(mainShader, vertexShader);
+  glAttachShader(mainShader, geometryShader);
+  glAttachShader(mainShader, fragmentShader);
+
+  glLinkProgram(mainShader);
+
+  glGetProgramiv(mainShader, GL_LINK_STATUS, &success);
+  if (!success){
+    glGetProgramInfoLog(mainShader, 512, NULL, infoLog);
+    printf("Main Error: %s\n", infoLog);
+  }
+
+  glDeleteShader(vertexShader);
+  glDeleteShader(geometryShader);
+  glDeleteShader(fragmentShader);
+
+  delete trueVSource;
+  delete trueGSource;
+  delete trueFSource;
+  delete (shaderF);
+  delete (shaderG);
+  delete (shaderV);
+
 }
 
 shader::shader(std::vector<const char*> computeShaders){

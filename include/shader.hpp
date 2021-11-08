@@ -14,6 +14,7 @@ class shader
 {
     public:
         shader(const char *vertexFile, const char *fragmentFile);
+        shader(const char *vertexFile, const char *geometryFile, const char *fragmentFile);
         shader(std::vector<const char*> computeShaders);
         virtual ~shader();
 
@@ -31,7 +32,7 @@ class shader
     protected:
       unsigned int mainShader;
     private:
-        unsigned int vertexShader, fragmentShader, computeShader;
+        unsigned int vertexShader, fragmentShader, geometryShader, computeShader;
 };
 
 #endif // SHADER_HPP

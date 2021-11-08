@@ -32,6 +32,7 @@ render::render(const char *winTitle, unsigned int width, unsigned int height)
 
     //glEnable(GL_CULL_FACE);  
     //glCullFace(GL_BACK);
+    glClearColor(0.8f, 1.0f, 1.0f, 1.0f);
 }
 
 render::~render()
@@ -52,7 +53,7 @@ void render::loadBuffers(VertexArr *mainArr, float *verticies_buffer, size_t siz
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mainArr->EBO);
 
     glBufferData(GL_ARRAY_BUFFER, size_vex, verticies_buffer, GL_DYNAMIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_element, elements_buffer, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_element, elements_buffer, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 
@@ -96,7 +97,6 @@ void render::renderBasicTriangle(int start, int amount){
 }
 
 void render::clear_screen(float r, float g, float b){
-    glClearColor(r,g,b,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

@@ -25,7 +25,7 @@ BLOCK_INT World::getBlockState(int x, int y, int z){
     return (worldOverrides[primitivePostoPos(x,y,z)]);
   }
   else{
-    return y <= ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT));
+    return y <= (((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT) + NOISE_FIXER));
   }
 }
 
@@ -48,13 +48,13 @@ void World::createBlock(int x, int y, int z, int type){
 
 
 int World::getBlockHeight(int x, int z){
-  return ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT)) ;
+  return (((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT) +NOISE_FIXER) );
 }
 
 // 1 = is world
 // 0 = is user
 int World::isWorldOrUser(int x, int y, int z){
-  return ((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT)) == y;
+  return (((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT)) + NOISE_FIXER) == y;
 }
 
 // Returns size of target
@@ -79,9 +79,9 @@ float* World::generateAVao(const float *baseVerticies, int *outputLen, int start
   targetVerticies = (float*) malloc(targetSize);
 
   for (int x = xStart; x<xEnd; x++){
-    for (int y = yStart; y<yEnd; y++){
-      highesty = yStart- 1;
-      for (int z = zStart; z<zEnd; z++){
+    for (int z = zStart; z<zEnd; z++){
+      highesty = yEnd - 1;
+      for (int y = yEnd; y>yStart; y--){
         if (isWorldOrUser(x,y,z) || (getBlockState(x,y,z) && y > highesty)){
         highesty = y;
         for (int c = 0; c<(baseSize/sizeof(float))/stride; c++){

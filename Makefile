@@ -10,7 +10,7 @@ INCLUDE=-I. -I./include/.
 
 PROGRAM_NAME=Engine
 
-.PHONY: build release execute debug clean leak
+.PHONY: debug_build release_build Release Debug leak clean
 
 debug_build:
 	$(CC) $(DEBUG_FLAGS) $(INCLUDE) $(FILES) $(OTHER) $(LIBS) -o $(PROGRAM_NAME).elf
