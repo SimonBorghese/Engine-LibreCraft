@@ -14,57 +14,37 @@ uniform sampler2D text5;
 
 uniform int useWire;
 
-void main(){
-if (useWire == 0){
-  switch(int(textNum)){
-    case 0:
-      FragColor = texture(text0, textCord);
-    break;
-    case 1:
-      FragColor = texture(text1, textCord);
-    break;
-    case 2:
-      FragColor = texture(text2, textCord);
-    break;
-    case 3:
-      FragColor = texture(text3, textCord);
-    break;
-    case 4:
-      FragColor = texture(text4, textCord);
-    break;
-    case 5:
-      FragColor = texture(text5, textCord);
-    break;
+flat in int useFog;
 
-  }
-  /*
-  if (textNum == 0.0f){
-    FragColor = texture(text0, textCord);
-  }
-  else if (textNum == 1.0f){
-    FragColor = texture(text1, textCord);
-  }
-  else if (textNum == 2.0f){
-    FragColor = texture(text2, textCord);
-  }
-  else if (textNum == 3.0f){
-    FragColor = texture(text3, textCord);
-  }
-  else if (textNum == 4.0f){
-    FragColor = texture(text4, textCord);
-  }
-  else if (textNum == 5.0f){
-    FragColor = texture(text5, textCord);
+void main(){
+  if (useWire == 0){
+    switch(int(textNum)){
+      case 0:
+        FragColor = texture(text0, textCord);
+      break;
+      case 1:
+        FragColor = texture(text1, textCord);
+      break;
+      case 2:
+        FragColor = texture(text2, textCord);
+      break;
+      case 3:
+        FragColor = texture(text3, textCord);
+      break;
+      case 4:
+        FragColor = texture(text4, textCord);
+      break;
+      case 5:
+        FragColor = texture(text5, textCord);
+      break;
+
+    }
   }
   else{
     FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
   }
-  */
-  
-  //FragColor = texture(text0, textCord);
-}
-else{
-  FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-}
-    //FragColor = vec4(textCord.x, textCord.y, 0.8f, 1.0f);
+
+  if (useFog == 1){
+    FragColor = FragColor + (vec4(0.76f, 0.99f, 1.0f, 0.99f) - FragColor) * 0.5;
+  }
 }

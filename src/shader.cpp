@@ -138,7 +138,7 @@ shader::shader(const char *vertexFile, const char *geometryFile, const char *fra
 }
 
 shader::shader(std::vector<const char*> computeShaders){
-  for (int shdr = 0; shdr < computeShaders.size(); shdr++){
+  for (int shdr = 0; shdr < (int) computeShaders.size(); shdr++){
     std::ifstream *shaderSrc = new std::ifstream(computeShaders.at(shdr), std::ios::binary);
 
 
@@ -216,4 +216,12 @@ int shader::getInt(GLint location){
 
 void shader::setInt(GLint location, int newInt){
   glUniform1i(location, newInt);
+}
+
+void shader::setVec3(GLint location, glm::vec3 newVec){
+  glUniform3fv(location, 3, glm::value_ptr(newVec));
+}
+
+void shader::setFloat(GLint location, float newFloat){
+  glUniform1f(location, newFloat);
 }

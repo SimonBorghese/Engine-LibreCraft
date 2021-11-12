@@ -97,7 +97,8 @@ void render::renderBasicTriangle(int start, int amount){
 }
 
 void render::clear_screen(float r, float g, float b){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClearColor(r,g,b,1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void render::update(){
@@ -112,4 +113,15 @@ int render::getCloseStatus(){
 
 void render::bindCurrentVAO(VertexArr *arr){
   glBindVertexArray(arr->VAO);
+}
+
+void render::reassignVBOBuffer(int dataSize, float *data){
+  glBufferData(GL_ARRAY_BUFFER, dataSize, data, GL_DYNAMIC_DRAW);
+}
+
+void render::overwriteVBOBuffer(VertexArr *mainArr, int start, size_t sizeofdata, float *data){
+  glBindBuffer(GL_ARRAY_BUFFER, mainArr->VBO);
+  //printf("Offset: %d Size: %d\n", start, sizeofdata);
+  glBufferSubData(GL_ARRAY_BUFFER, start, sizeofdata, data);
+
 }

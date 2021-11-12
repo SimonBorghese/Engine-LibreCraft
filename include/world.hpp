@@ -45,6 +45,8 @@ class World{
 
     BLOCK_INT getBlockState(int x, int y, int z);
 
+    int isUserBlock(int x, int y, int z);
+
     int getBlockHeight(int x, int z);
 
     void destroyBlock(int x, int y, int z);

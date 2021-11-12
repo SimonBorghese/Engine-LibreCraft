@@ -15,7 +15,9 @@
 
 #define FPS_TARGET 60
 
-int VIEWDIST = 30;
+
+
+int VIEWDIST = 20;
 
 
 using namespace std;
@@ -24,9 +26,10 @@ shader *mainShader;
 render *mainRender;
 Image *top, *bottom, *left_t, *right_t, *front, *back;
 
-GLint wire_loc, projection_loc, view_loc, model_loc;
+GLint wire_loc, projection_loc, view_loc, model_loc, posX_loc, posZ_loc, fogdist_loc;
 glm::vec3 *pos, *forward_pos, *trueForward;
 
+uint32_t frameStartTime, frameEndTime;
 
 float vertices[] = {
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 
@@ -96,6 +99,8 @@ int outputsize;
 
 glm::mat4 model, view, projection;
 
+int x1,y1_p,z1, x2,y2,z2;
+
 void initalizeClasses(){
   // Initalize the renderer and main shader
   mainRender = new render("UwU Minecraft", WIDTH, HEIGHT);
@@ -109,7 +114,7 @@ void initalizeClasses(){
   front = new Image("textures/sidedirt.jpg", GL_TEXTURE4, GL_RGB, 0);
   back = new Image("textures/sidedirt.jpg", GL_TEXTURE5, GL_RGB, 0);
   // Make the camera
-  cam = new Camera(glm::vec3(0, 0, 0), 0.005f, WIDTH, HEIGHT);
+  cam = new Camera(glm::vec3(0, 0, 0), 0.005f);
   
   // Make the matricies
   model = glm::mat4(1.0f);
@@ -136,6 +141,10 @@ void loadBuffers(){
 
   wire_loc = mainShader->getUniformLocation("useWire");
 
+  fogdist_loc = mainShader->getUniformLocation("fogdist");
+  posX_loc = mainShader->getUniformLocation("posX");
+  posZ_loc = mainShader->getUniformLocation("posZ");
+
   pos = new glm::vec3;
   forward_pos = new glm::vec3;
   trueForward = new glm::vec3;
@@ -159,6 +168,8 @@ void loadBuffers(){
   //mainShader->setInt(wire_loc, 1);
 }
 
+unsigned char *stuffdata;
+
 int main()
 {
     initalizeClasses();
@@ -167,17 +178,15 @@ int main()
   
     loadBuffers();
 
-    uint32_t startRender, endRender, deltaTime, lastFrame;
+    uint32_t startRender, endRender, deltaTime = 0, lastFrame;
     uint32_t waitTime = 1000/FPS_TARGET;
     uint32_t fps_c = 0;
-
-
-    uint32_t startStat, endStat;
 
     endRender = SDL_GetTicks();
     lastFrame = endRender;
     
     int posChanged = 1;
+
 
     while (!(e.type == SDL_QUIT)){
       *pos = cam->getPos();
@@ -200,7 +209,6 @@ int main()
         }
         posChanged = 0;
       }
-      
 
 
       startRender = SDL_GetTicks();
@@ -256,16 +264,32 @@ int main()
       }
       
 
-      mainRender->clear_screen(0.8f, 1.0f, 1.0f);
+      mainRender->clear_screen(0.62f, 0.99f, 1.0f);
+
+      x1 = (int) round(pos->x) -VIEWDIST;
+      //y1 = (int) round(pos->x) -VIEWDIST;
+      y1_p = 0;
+      z1 = (int) round(pos->z) -VIEWDIST;
+
+      x2 = (int) round(pos->x) +VIEWDIST;
+      y2 = (int) round(pos->y) +VIEWDIST;
+      z2 = (int) round(pos->z) +VIEWDIST;
+      //printf("Rendering to: %d %d %d :: %d %d %d\n", x1,y1_p,z1,x2,y2,z2);
+      output = world->generateAVao(vertices, &outputsize, 0, 3, sizeof(vertices), 6, x1,y1_p,z1,x2,y2,z2);
+
+      //mainRender->overwriteVBOBuffer(&baseVAO, 0, outputsize*sizeof(float), output);
+      mainRender->loadBuffers(&baseVAO, output,outputsize*sizeof(float), elements, sizeof(elements));
 
       cam->setView((&view));
       mainShader->setMatrix4f(view_loc, view);
+      mainShader->setFloat(posX_loc, pos->x);
+      mainShader->setFloat(posZ_loc, pos->z);
+      mainShader->setFloat(fogdist_loc, (float) VIEWDIST-5);
+      
       
 
 
-
       //mainShader->setInt(wire_loc, 0);
-
       mainRender->renderBasicTriangle(0, outputsize);
 
       mainRender->update();
@@ -283,7 +307,7 @@ int main()
         lastFrame = SDL_GetTicks();
       }
       if (deltaTime <= waitTime){
-        SDL_Delay(waitTime - deltaTime);
+        //SDL_Delay(waitTime - deltaTime);
       }
 
 

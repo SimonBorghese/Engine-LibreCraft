@@ -28,6 +28,10 @@ class render
 
         void renderCubes(Cube **cubes, int max_cubes, shader *shaderProgram);
 
+        void reassignVBOBuffer(int dataSize, float *data);
+
+        void overwriteVBOBuffer(VertexArr *mainArr, int start, size_t sizeofdata, float *data);
+
         void bindCurrentVAO(struct VertexArr *arr);
 
         void clear_screen(float r, float g, float b);

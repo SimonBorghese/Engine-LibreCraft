@@ -1,2 +1,2 @@
 audio = true
-run = "make debug_build Release"
+run = "make release_build Release"

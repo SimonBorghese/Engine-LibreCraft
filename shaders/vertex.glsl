@@ -11,6 +11,12 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+flat out int useFog;
+
+uniform float posX;
+uniform float posZ;
+uniform float fogdist;
+
 void main(){
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
     
@@ -18,4 +24,10 @@ void main(){
 
     textCord = vec2(aTex.x, 1.0 - aTex.y);
     textNum = aTextNum;
+    if (distance(aPos.x, posX) >= fogdist || distance(aPos.z, posZ) >= fogdist){
+      useFog = 1;
+    }
+    else{
+      useFog = 0;
+    }
 }

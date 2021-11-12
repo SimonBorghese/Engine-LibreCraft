@@ -9,7 +9,7 @@
 
 class Camera{
   public:
-    Camera(glm::vec3 newCameraPos, float speed, int WIN_WIDTH, int WIN_HEIGHT);
+    Camera(glm::vec3 newCameraPos, float speed);
     virtual ~Camera();
 
     void setSpeed(float speed);
@@ -48,7 +48,6 @@ class Camera{
     // Some Camera values
     glm::vec3 cameraFront;
     glm::vec3 cameraUp;
-    glm::vec3 cameraRight;
 
     // Const values
     glm::vec3 up;

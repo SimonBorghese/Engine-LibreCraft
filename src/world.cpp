@@ -29,6 +29,8 @@ BLOCK_INT World::getBlockState(int x, int y, int z){
   }
 }
 
+
+
 void World::destroyBlock(int x, int y, int z){
   createBlock(x,y,z,0);
 }
@@ -54,7 +56,7 @@ int World::getBlockHeight(int x, int z){
 // 1 = is world
 // 0 = is user
 int World::isWorldOrUser(int x, int y, int z){
-  return (((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT)) + NOISE_FIXER) == y;
+  return ((((int) (noise->GetNoise((float)x, float(z)) * NOISE_CONSTANT)) + NOISE_FIXER) == y);
 }
 
 // Returns size of target
@@ -80,40 +82,46 @@ float* World::generateAVao(const float *baseVerticies, int *outputLen, int start
 
   for (int x = xStart; x<xEnd; x++){
     for (int z = zStart; z<zEnd; z++){
-      highesty = yEnd - 1;
+      highesty = 0;
       for (int y = yEnd; y>yStart; y--){
-        if (isWorldOrUser(x,y,z) || (getBlockState(x,y,z) && y > highesty)){
-        highesty = y;
-        for (int c = 0; c<(baseSize/sizeof(float))/stride; c++){
-          // If the block is valid
+        if (getBlockState(x,y,z) && y >=highesty){
+          //printf("Y: %d is not more than Highest Y: %d\n", y, highesty);
+          
+          highesty = y;
+          for (int c = 0; c< (int)((baseSize/sizeof(float))/stride); c++){
+            // If the block is valid
 
-            for (int ver = startVertexPos; ver<endVertexPos; ver++){
-              setPos_c = ((c*stride)+ver);
-              switch (ver){
-                case 0:
-                  targetVerticies[currentPos] = baseVerticies[setPos_c] + x;
-                break;
-                case 1:
-                  targetVerticies[currentPos] = baseVerticies[setPos_c] + y;
-                break;
+              for (int ver = startVertexPos; ver<endVertexPos; ver++){
+                setPos_c = ((c*stride)+ver);
+                switch (ver){
+                  case 0:
+                    targetVerticies[currentPos] =   baseVerticies[setPos_c] + x;
+                  break;
+                  case 1:
+                    targetVerticies[currentPos] = baseVerticies[setPos_c] + y;
+                  break;
 
-                case 2:
-                  targetVerticies[currentPos] = baseVerticies[setPos_c] + z;
-                break;
+                  case 2:
+                    targetVerticies[currentPos] = baseVerticies[setPos_c] + z;
+                  break;
+                }
+                currentPos++;
               }
-              currentPos++;
-            }
-            for (int ver2 = stride-endVertexPos; ver2<stride; ver2++){
-              setPos_c = ((c*stride)+ver2);
-              targetVerticies[currentPos] = baseVerticies[setPos_c];
-              currentPos++;
-            }
+              for (int ver2 = stride-endVertexPos; ver2<stride; ver2++){
+                setPos_c = ((c*stride)+ver2);
+                targetVerticies[currentPos] = baseVerticies[setPos_c];
+                currentPos++;
+              }
         
-      }
+          }
         }
     }
     }
   }
   *outputLen = currentPos;
   return targetVerticies;
+}
+
+int World::isUserBlock(int x, int y, int z){
+  return (worldOverrides.count(primitivePostoPos(x,y,z)) != 0);
 }

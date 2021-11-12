@@ -1,6 +1,6 @@
 #include "../include/camera.hpp"
 
-Camera::Camera(glm::vec3 newCameraPos, float speed, int WIN_WIDTH, int WIN_HEIGHT) : cameraPos(newCameraPos), cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)), cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),  up(glm::vec3(0.0f, 1.0f, 0.0f)), right(glm::vec3(1.0f, 0.0f, 0.0f)), cam_speed(speed), yaw_t(90.0f), pitch_t(0.0f), t_deltaTime(1.0f){
+Camera::Camera(glm::vec3 newCameraPos, float speed) : cam_speed(speed), cameraPos(newCameraPos), cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)), cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),  up(glm::vec3(0.0f, 1.0f, 0.0f)), right(glm::vec3(1.0f, 0.0f, 0.0f)), t_deltaTime(1.0f), yaw_t(90.0f), pitch_t(0.0f){
 
 }
 Camera::~Camera(){

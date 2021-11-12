@@ -29,6 +29,9 @@ class shader
 
         void bindTexture(Image *img, const char *unfi_name, int text);
 
+        void setVec3(GLint location, glm::vec3 newVec);
+        
+        void setFloat(GLint location, float newFloat);
     protected:
       unsigned int mainShader;
     private:
